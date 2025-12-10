@@ -1,0 +1,259 @@
+/* ===== BASE ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  background: #0f172a;   /* azul oscuro de fondo */
+  color: #ffffff;
+}
+
+/* Contenedor general de la pantalla */
+.layout-setup {
+  max-width: 1150px;      /* ancho máximo del panel */
+  margin: 20px auto;      /* centrado horizontal */
+  padding: 0 10px;        /* un poco de respiro a los lados */
+}
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: #003b3b;
+  color: #fff;
+  font-weight: 600;
+}
+
+.tab-button.active {
+  background: #00b894;
+  color: #002525;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* ===== PANEL GENÉRICO ===== */
+.panel {
+  background: #004747;
+  color: #ffffff;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* ===== FORMULARIO ===== */
+
+.panel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header-form {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.buscar-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buscar-box label {
+  font-size: 13px;
+}
+
+.buscar-box input {
+  padding: 4px 6px;
+}
+
+.buscar-box button {
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.titulo-form {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.estado-actual {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.estado-display {
+  background: #00b894;
+  color: #002525;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.logo-box img {
+  height: 60px;
+}
+
+/* Grid de campos del formulario, se mantiene gap constante */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.campo-row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+}
+
+.campo-row label {
+  font-size: 14px;
+}
+
+.campo-row input,
+.campo-row select {
+  padding: 5px 6px;
+  border-radius: 4px;
+  border: 1px solid #0b4c4c;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botones inferiores del formulario */
+.botonera-form {
+  margin-top: 4px;
+  display: flex;
+  gap: 10px;
+}
+
+.botonera-form button {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== LISTA ===== */
+
+.panel-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lista-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lista-busqueda {
+  display: flex;
+  gap: 6px;
+}
+
+.lista-busqueda input {
+  padding: 4px 6px;
+}
+
+.lista-busqueda button {
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Scroll de la tabla si crece mucho */
+.lista-contenedor {
+  max-height: 520px;
+  overflow-y: auto;
+  margin-top: 6px;
+}
+
+/* Tabla de equipos */
+#tablaOrdenes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+#tablaOrdenes th,
+#tablaOrdenes td {
+  border-bottom: 1px solid #0b4c4c;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+#tablaOrdenes tr {
+  cursor: pointer;
+}
+
+#tablaOrdenes tr:hover {
+  background: #035959;
+}
+
+.lista-tip {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .header-form {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  .logo-box {
+    justify-self: flex-end;
+  }
+
+  .campo-row {
+    grid-template-columns: 1fr;
+  }
+}
+.combo-plus {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.combo-plus select {
+  flex: 0 0 220px;  /* ancho fijo del combo */
+  padding: 4px 6px;
+}
+
+.combo-plus input {
+  flex: 1;
+  padding: 4px 6px;
+}
+
+.combo-plus button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}

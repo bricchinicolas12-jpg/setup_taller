@@ -1,0 +1,1333 @@
+{% extends "base.html" %}
+{% block title %}Setup - Equipos{% endblock %}
+
+{% block content %}
+<div class="layout-setup">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-button active" data-tab="form">Formulario</button>
+    <button class="tab-button" data-tab="lista">Lista de órdenes</button>
+    <button class="tab-button" data-tab="clientes">Clientes</button>
+    <button class="tab-button" data-tab="equipos">Equipos</button>
+    <button class="tab-button" data-tab="catalogos">Catálogos</button>
+  </div>
+
+  <div class="tab-content">
+  <!-- ============ TAB CATÁLOGOS ============ -->
+    <div id="catalogos" class="tab-pane">
+    <div class="panel panel-lista">
+        <h3>Catálogos</h3>
+
+        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:10px;">
+
+        <!-- FALLAS -->
+        <div style="flex:1 1 300px;">
+            <h4>Fallas</h4>
+            <div class="form-grid" style="margin-bottom:8px;">
+            <div class="campo-row">
+                <label for="cat_falla_desc">Descripción:</label>
+                <input type="text" id="cat_falla_desc">
+            </div>
+            <div class="campo-row">
+                <label></label>
+                <button id="btnCatFallaGuardar" type="button">Agregar falla</button>
+            </div>
+            </div>
+
+            <div class="lista-contenedor" style="max-height:220px;">
+            <table id="tablaCatFallas">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            </div>
+        </div>
+
+        <!-- REPARACIONES -->
+        <div style="flex:1 1 300px;">
+            <h4>Reparaciones</h4>
+            <div class="form-grid" style="margin-bottom:8px;">
+            <div class="campo-row">
+                <label for="cat_rep_desc">Descripción:</label>
+                <input type="text" id="cat_rep_desc">
+            </div>
+            <div class="campo-row">
+                <label></label>
+                <button id="btnCatRepGuardar" type="button">Agregar reparación</button>
+            </div>
+            </div>
+
+            <div class="lista-contenedor" style="max-height:220px;">
+            <table id="tablaCatReparaciones">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            </div>
+        </div>
+
+        <!-- REPUESTOS -->
+        <div style="flex:1 1 320px;">
+            <h4>Repuestos</h4>
+            <div class="form-grid" style="margin-bottom:8px;">
+            <div class="campo-row">
+                <label for="cat_rep_nombre">Nombre:</label>
+                <input type="text" id="cat_rep_nombre">
+            </div>
+            <div class="campo-row">
+                <label for="cat_rep_detalle">Detalle:</label>
+                <input type="text" id="cat_rep_detalle">
+            </div>
+            <div class="campo-row">
+                <label for="cat_rep_costo">Costo aprox.:</label>
+                <input type="number" step="0.01" id="cat_rep_costo">
+            </div>
+            <div class="campo-row">
+                <label></label>
+                <button id="btnCatRepuestoGuardar" type="button">Agregar repuesto</button>
+            </div>
+            </div>
+
+            <div class="lista-contenedor" style="max-height:220px;">
+            <table id="tablaCatRepuestos">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Detalle</th>
+                    <th>Costo</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </div>
+
+    <!-- ============ TAB FORMULARIO ORDEN ============ -->
+    <div id="form" class="tab-pane active">
+      <div class="panel panel-form">
+
+        <div class="header-form">
+          <div class="buscar-box">
+            <label for="buscar_nro">N°</label>
+            <input type="number" id="buscar_nro" placeholder="N°" />
+            <button id="btnBuscar" type="button">BUSCAR</button>
+          </div>
+
+          <div class="titulo-form">CONSULTA Y MODIFICA</div>
+
+          <div class="estado-actual">
+            <span>ESTADO:</span>
+            <span id="estado_display" class="estado-display">EN REPARACION</span>
+          </div>
+
+          <div class="logo-box">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="SETUP">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="campo-row">
+            <label for="nro">N° interno:</label>
+            <input type="number" id="nro" readonly>
+          </div>
+
+          <div class="campo-row">
+            <label for="fecha">Fecha ingreso:</label>
+            <input type="date" id="fecha">
+          </div>
+
+          <div class="campo-row">
+            <label for="hora_ingreso">Hora ingreso:</label>
+            <input type="time" id="hora_ingreso">
+          </div>
+
+          <div class="campo-row">
+            <label for="cliente_select_form">Cliente / contacto:</label>
+            <select id="cliente_select_form">
+                <option value="">-- Seleccionar cliente --</option>
+            </select>
+          </div>
+
+
+          <div class="campo-row">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono">
+          </div>
+
+          <div class="campo-row">
+            <label for="equipo">Equipo:</label>
+            <input type="text" id="equipo" list="lista_equipos">
+            <datalist id="lista_equipos"></datalist>
+          </div>
+
+          <div class="campo-row">
+            <label for="serie">S/N:</label>
+            <input type="text" id="serie">
+          </div>
+
+           <div class="campo-row">
+            <label for="falla_select">Falla:</label>
+            <div class="combo-plus">
+                <select id="falla_select">
+                <option value="">-- Seleccionar falla --</option>
+                </select>
+                <input type="text" id="falla_comentario" placeholder="Detalle adicional">
+                <button type="button" id="btnFallaPlus">+</button>
+            </div>
+           </div>
+
+
+          <div class="campo-row">
+            <label for="observaciones">Observaciones:</label>
+            <input type="text" id="observaciones">
+          </div>
+
+          <div class="campo-row">
+            <label for="accesorios">Accesorios:</label>
+            <input type="text" id="accesorios" list="lista_accesorios">
+            <datalist id="lista_accesorios"></datalist>
+          </div>
+
+          <div class="campo-row">
+            <label for="reparacion_select">Reparación:</label>
+            <div class="combo-plus">
+                <select id="reparacion_select">
+                <option value="">-- Seleccionar reparación --</option>
+                </select>
+                <input type="text" id="reparacion_comentario" placeholder="Detalle adicional">
+                <button type="button" id="btnReparacionPlus">+</button>
+            </div>
+          </div>
+
+
+
+          <div class="campo-row">
+            <label for="repuesto_select">Repuestos:</label>
+            <div class="combo-plus">
+                <select id="repuesto_select">
+                <option value="">-- Seleccionar repuesto --</option>
+                </select>
+                <input type="text" id="repuesto_comentario" placeholder="Detalle adicional">
+                <button type="button" id="btnRepuestoPlus">+</button>
+            </div>
+           </div>
+
+
+          <div class="campo-row">
+            <label for="importe">Importe:</label>
+            <input type="number" step="0.01" id="importe">
+          </div>
+
+          <div class="campo-row">
+            <label for="estado">Cambiar estado:</label>
+            <select id="estado">
+              <option>EN REPARACION</option>
+              <option>EN SOS</option>
+              <option>EN WIRTECH</option>
+              <option>EN EKON</option>
+              <option>SUSPENDIDA</option>
+              <option>TERMINADA</option>
+              <option>RETIRADA</option>
+              <option>EN AIR</option>
+              <option>EN SERVPRINT</option>
+              <option>EN NICO GORI</option>
+            </select>
+          </div>
+
+          <div class="campo-row">
+            <label for="fecha_salida">Fecha salida:</label>
+            <input type="date" id="fecha_salida">
+          </div>
+
+          <div class="campo-row">
+            <label for="hora_salida">Hora salida:</label>
+            <input type="time" id="hora_salida">
+          </div>
+
+          <div class="campo-row">
+            <label for="fecha_regreso">Fecha regreso:</label>
+            <input type="date" id="fecha_regreso">
+          </div>
+
+          <div class="campo-row">
+            <label for="hora_regreso">Hora regreso:</label>
+            <input type="time" id="hora_regreso">
+          </div>
+        </div>
+
+        <div class="botonera-form">
+          <button id="btnAgregar" type="button">AGREGAR</button>
+          <button id="btnModificar" type="button">MODIFICAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TAB LISTA ORDENES ============ -->
+    <div id="lista" class="tab-pane">
+      <div class="panel panel-lista">
+        <div class="lista-header">
+          <h3>Órdenes cargadas</h3>
+          <div class="lista-busqueda">
+            <input type="text" id="filtro_texto" placeholder="Filtrar por nombre/equipo...">
+            <button id="btnRefrescarLista" type="button">Refrescar</button>
+          </div>
+        </div>
+
+        <div class="lista-contenedor">
+          <table id="tablaOrdenes">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Fecha ingreso</th>
+                <th>Hora ingreso</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Equipo</th>
+                <th>S/N</th>
+                <th>Falla</th>
+                <th>Observaciones</th>
+                <th>Accesorios</th>
+                <th>Reparación</th>
+                <th>Repuestos</th>
+                <th>Importe</th>
+                <th>Estado</th>
+                <th>Fecha salida</th>
+                <th>Hora salida</th>
+                <th>Fecha regreso</th>
+                <th>Hora regreso</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="lista-tip">Tip: hacé click en una fila para cargarla en el formulario.</p>
+      </div>
+    </div>
+
+    <!-- ============ TAB CLIENTES ============ -->
+    <div id="clientes" class="tab-pane">
+      <div class="panel panel-lista">
+        <div class="lista-header">
+          <h3>Clientes</h3>
+          <div class="lista-busqueda">
+            <input type="text" id="cliente_filtro" placeholder="Filtrar por nombre...">
+            <button id="btnClienteNuevo" type="button">Nuevo</button>
+            <button id="btnClienteGuardar" type="button">Guardar</button>
+          </div>
+        </div>
+
+        <!-- Formulario cliente extendido (como en tu programa viejo) -->
+        <div class="form-grid" style="margin-bottom:10px;">
+          <div class="campo-row">
+            <label for="cliente_id">ID:</label>
+            <input type="number" id="cliente_id" readonly>
+          </div>
+          <div class="campo-row">
+            <label for="cliente_nombre">Nombres:</label>
+            <input type="text" id="cliente_nombre">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_direccion">Dirección:</label>
+            <input type="text" id="cliente_direccion">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_localidad">Localidad:</label>
+            <input type="text" id="cliente_localidad">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_provincia">Estado/Provincia:</label>
+            <input type="text" id="cliente_provincia">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_cp">CP:</label>
+            <input type="text" id="cliente_cp">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_telefono">Teléfono:</label>
+            <input type="text" id="cliente_telefono">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_celular">Celular:</label>
+            <input type="text" id="cliente_celular">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_email">E-mail:</label>
+            <input type="text" id="cliente_email">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_cuit">CUIT:</label>
+            <input type="text" id="cliente_cuit">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_contacto">Contacto:</label>
+            <input type="text" id="cliente_contacto">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_observaciones">Observaciones:</label>
+            <input type="text" id="cliente_observaciones">
+          </div>
+          <div class="campo-row">
+            <label for="cliente_giro">Giro de la Empresa:</label>
+            <input type="text" id="cliente_giro">
+          </div>
+          <div class="campo-row">
+            <label>Opciones:</label>
+            <div>
+              <label>
+                <input type="checkbox" id="cliente_garantia">
+                Cliente Garantía
+              </label>
+              &nbsp;&nbsp;
+              <label>
+                <input type="checkbox" id="cliente_contrato">
+                Cliente con Contrato
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="lista-contenedor">
+          <table id="tablaClientes">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Localidad</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="lista-tip">Click en un cliente para editarlo y usarlo en las órdenes.</p>
+      </div>
+    </div>
+
+    <!-- ============ TAB EQUIPOS ============ -->
+    <div id="equipos" class="tab-pane">
+      <div class="panel panel-lista">
+        <div class="lista-header">
+          <h3>Equipos</h3>
+          <div class="lista-busqueda">
+            <input type="text" id="equipo_filtro" placeholder="Filtrar por descripción/serie...">
+            <button id="btnEquipoNuevo" type="button">Nuevo</button>
+            <button id="btnEquipoGuardar" type="button">Guardar</button>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-bottom:10px;">
+          <div class="campo-row">
+            <label for="equipo_id">ID:</label>
+            <input type="number" id="equipo_id" readonly>
+          </div>
+          <div class="campo-row">
+            <label for="equipo_descripcion">Descripción:</label>
+            <input type="text" id="equipo_descripcion">
+          </div>
+          <div class="campo-row">
+            <label for="equipo_serie">N° de Serie:</label>
+            <input type="text" id="equipo_serie">
+          </div>
+          <div class="campo-row">
+            <label for="equipo_tipo">Tipo de Equipo:</label>
+            <input type="text" id="equipo_tipo">
+          </div>
+          <div class="campo-row">
+            <label for="equipo_marca">Marca:</label>
+            <input type="text" id="equipo_marca">
+          </div>
+          <div class="campo-row">
+            <label for="equipo_modelo">Modelo:</label>
+            <input type="text" id="equipo_modelo">
+          </div>
+          <div class="campo-row">
+            <label for="equipo_cliente_select">Cliente:</label>
+            <!-- SELECT desplegable (como en Prodeman) -->
+            <select id="equipo_cliente_select">
+              <option value="">-- Seleccionar cliente --</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lista-contenedor">
+          <table id="tablaEquipos">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Serie</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Clientes</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="lista-tip">Cada equipo debe estar vinculado al menos a un cliente.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  /* ---------- TABS ---------- */
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabPanes = document.querySelectorAll(".tab-pane");
+
+  function cambiarTab(id) {
+    tabButtons.forEach(b => b.classList.toggle("active", b.dataset.tab === id));
+    tabPanes.forEach(p => p.classList.toggle("active", p.id === id));
+  }
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => cambiarTab(btn.dataset.tab));
+  });
+
+  function irATabFormulario() { cambiarTab("form"); }
+
+  /* ---------- CACHES ---------- */
+  let listaOrdenes = [];
+  let listaClientes = [];
+  let listaEquipos = [];
+
+  /* ========== FORMULARIO ORDEN ========== */
+  function leerFormulario() {
+  const selCliente = document.getElementById("cliente_select_form");
+  const clienteId = selCliente.value;
+  const cliente = listaClientes.find(c => String(c.id) === String(clienteId));
+
+  return {
+    fecha: document.getElementById("fecha").value,
+    hora_ingreso: document.getElementById("hora_ingreso").value,
+    // usamos el nombre del cliente elegido
+    nombre: cliente ? cliente.nombre : "",
+    telefono: document.getElementById("telefono").value,
+      equipo: document.getElementById("equipo").value,
+      serie: document.getElementById("serie").value,
+      observaciones: document.getElementById("observaciones").value,
+      accesorios: document.getElementById("accesorios").value,
+      falla: combinarSeleccion("falla_select", "falla_comentario"),
+      reparacion: combinarSeleccion("reparacion_select", "reparacion_comentario"),
+      repuestos: combinarSeleccion("repuesto_select", "repuesto_comentario"),
+      importe: document.getElementById("importe").value,
+      estado: document.getElementById("estado").value,
+      fecha_salida: document.getElementById("fecha_salida").value,
+      hora_salida: document.getElementById("hora_salida").value,
+      fecha_regreso: document.getElementById("fecha_regreso").value,
+      hora_regreso: document.getElementById("hora_regreso").value
+    };
+  }
+
+  function escribirFormulario(o) {
+    document.getElementById("nro").value = o.id || "";
+    document.getElementById("fecha").value = (o.fecha || "").slice(0,10);
+    document.getElementById("hora_ingreso").value = (o.hora_ingreso || "").slice(0,5);
+    document.getElementById("nombre").value = o.nombre_contacto || "";
+    document.getElementById("telefono").value = o.telefono_contacto || "";
+    document.getElementById("equipo").value = o.equipo_texto || "";
+    document.getElementById("serie").value = o.serie_texto || "";
+    descomponerCampo(o.falla, "falla_select", "falla_comentario");
+    descomponerCampo(o.reparacion, "reparacion_select", "reparacion_comentario");
+    descomponerCampo(o.repuestos, "repuesto_select", "repuesto_comentario");
+
+    document.getElementById("observaciones").value = o.observaciones || "";
+    document.getElementById("accesorios").value = o.accesorios || "";
+    document.getElementById("importe").value = o.importe ?? "";
+    document.getElementById("estado").value = o.estado || "EN REPARACION";
+    document.getElementById("estado_display").textContent = o.estado || "EN REPARACION";
+    document.getElementById("fecha_salida").value = (o.fecha_salida || "").slice(0,10);
+    document.getElementById("hora_salida").value = (o.hora_salida || "").slice(0,5);
+    document.getElementById("fecha_regreso").value = (o.fecha_regreso || "").slice(0,10);
+    document.getElementById("hora_regreso").value = (o.hora_regreso || "").slice(0,5);
+  }
+
+  document.getElementById("estado").addEventListener("change", () => {
+    document.getElementById("estado_display").textContent =
+      document.getElementById("estado").value;
+  });
+
+  document.getElementById("btnBuscar").addEventListener("click", async () => {
+    const nro = document.getElementById("buscar_nro").value;
+    if (!nro) { alert("Ingresa un número de orden"); return; }
+    const resp = await fetch(`/api/ordenes/${nro}`);
+    if (!resp.ok) { alert("No se encontró la orden"); return; }
+    const data = await resp.json();
+    escribirFormulario(data);
+    irATabFormulario();
+  });
+
+    function validarClienteYEquipo(datos) {
+    const selCliente = document.getElementById("cliente_select_form");
+    const clienteId = selCliente.value;
+    const equipoExiste  = listaEquipos.some(e =>
+        (e.descripcion || "") === datos.equipo ||
+        (e.serie || "") === datos.serie
+    );
+
+    if (!clienteId) {
+        alert("Debes seleccionar un cliente existente (solapa CLIENTES).");
+        return false;
+    }
+    if (!equipoExiste) {
+        alert("Ese equipo no existe. Cargalo primero en la solapa EQUIPOS.");
+        return false;
+    }
+    return true;
+    }
+
+    document.getElementById("cliente_select_form").addEventListener("change", () => {
+    const sel = document.getElementById("cliente_select_form");
+    const id = sel.value;
+    const cli = listaClientes.find(c => String(c.id) === String(id));
+    if (cli) {
+        document.getElementById("telefono").value = cli.telefono || "";
+    }
+    });
+
+  document.getElementById("btnAgregar").addEventListener("click", async () => {
+    const datos = leerFormulario();
+    if (!datos.nombre) { alert("El nombre es obligatorio"); return; }
+    if (!validarClienteYEquipo(datos)) return;
+
+    const resp = await fetch("/api/ordenes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos)
+    });
+    const r = await resp.json();
+    if (!resp.ok || !r.ok) { alert(r.error || "Error al guardar"); return; }
+    alert("Orden creada con N° " + r.id);
+    document.getElementById("nro").value = r.id;
+    document.getElementById("buscar_nro").value = r.id;
+    await cargarListaOrdenes();
+  });
+
+  document.getElementById("btnModificar").addEventListener("click", async () => {
+    const nro = document.getElementById("nro").value;
+    if (!nro) { alert("Primero busca o crea una orden"); return; }
+    const datos = leerFormulario();
+    if (!validarClienteYEquipo(datos)) return;
+
+    const resp = await fetch(`/api/ordenes/${nro}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos)
+    });
+    const r = await resp.json();
+    if (!resp.ok || !r.ok) { alert(r.error || "Error al modificar"); return; }
+    alert("Orden modificada");
+    document.getElementById("estado_display").textContent = datos.estado;
+    await cargarListaOrdenes();
+  });
+
+  /* ========== LISTA ORDENES ========== */
+    async function cargarListaOrdenes() {
+    const resp = await fetch("/api/ordenes");
+    if (!resp.ok) { console.error("Error /api/ordenes", resp.status); return; }
+    listaOrdenes = await resp.json();
+    renderizarListaOrdenes();
+  }
+
+  // la dejo accesible globalmente (window) para que la usen otros handlers
+  window.cargarListasAuxiliares = async function() {
+    await Promise.all([
+      cargarSelect("/api/fallas",        "falla_select",      "descripcion"),
+      cargarSelect("/api/reparaciones",  "reparacion_select", "descripcion"),
+      cargarSelect("/api/repuestos",     "repuesto_select",   "nombre")
+    ]);
+  };
+
+
+
+
+  function renderizarListaOrdenes() {
+    const tbody = document.querySelector("#tablaOrdenes tbody");
+    const filtro = document.getElementById("filtro_texto").value.toLowerCase();
+    tbody.innerHTML = "";
+    listaOrdenes
+      .filter(o => {
+        if (!filtro) return true;
+        const texto = `${o.nombre_contacto || ""} ${o.equipo_texto || ""}`.toLowerCase();
+        return texto.includes(filtro);
+      })
+      .forEach(o => {
+        const tr = document.createElement("tr");
+        tr.dataset.id = o.id;
+        tr.innerHTML = `
+          <td>${o.id}</td>
+          <td>${(o.fecha || "").slice(0,10)}</td>
+          <td>${(o.hora_ingreso || "").slice(0,5)}</td>
+          <td>${o.nombre_contacto || ""}</td>
+          <td>${o.telefono_contacto || ""}</td>
+          <td>${o.equipo_texto || ""}</td>
+          <td>${o.serie_texto || ""}</td>
+          <td>${o.falla || ""}</td>
+          <td>${o.observaciones || ""}</td>
+          <td>${o.accesorios || ""}</td>
+          <td>${o.reparacion || ""}</td>
+          <td>${o.repuestos || ""}</td>
+          <td>${o.importe ?? ""}</td>
+          <td>${o.estado || ""}</td>
+          <td>${(o.fecha_salida || "").slice(0,10)}</td>
+          <td>${(o.hora_salida || "").slice(0,5)}</td>
+          <td>${(o.fecha_regreso || "").slice(0,10)}</td>
+          <td>${(o.hora_regreso || "").slice(0,5)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+  }
+  
+  document.querySelector("#tablaOrdenes tbody").addEventListener("click", (e) => {
+    const fila = e.target.closest("tr");
+    if (!fila) return;
+    const id = fila.dataset.id;
+    const orden = listaOrdenes.find(o => String(o.id) === String(id));
+    if (orden) {
+      escribirFormulario(orden);
+      document.getElementById("buscar_nro").value = orden.id;
+      irATabFormulario();
+    }
+  });
+
+  document.getElementById("filtro_texto").addEventListener("input", renderizarListaOrdenes);
+  document.getElementById("btnRefrescarLista").addEventListener("click", cargarListaOrdenes);
+
+  /* ========== CLIENTES (TAB) ========== */
+  function limpiarFormularioCliente() {
+    document.getElementById("cliente_id").value = "";
+    document.getElementById("cliente_nombre").value = "";
+    document.getElementById("cliente_direccion").value = "";
+    document.getElementById("cliente_localidad").value = "";
+    document.getElementById("cliente_provincia").value = "";
+    document.getElementById("cliente_cp").value = "";
+    document.getElementById("cliente_telefono").value = "";
+    document.getElementById("cliente_celular").value = "";
+    document.getElementById("cliente_email").value = "";
+    document.getElementById("cliente_cuit").value = "";
+    document.getElementById("cliente_contacto").value = "";
+    document.getElementById("cliente_observaciones").value = "";
+    document.getElementById("cliente_giro").value = "";
+    document.getElementById("cliente_garantia").checked = false;
+    document.getElementById("cliente_contrato").checked = false;
+  }
+
+  function escribirFormularioCliente(c) {
+    document.getElementById("cliente_id").value = c.id || "";
+    document.getElementById("cliente_nombre").value = c.nombre || "";
+    document.getElementById("cliente_direccion").value = c.direccion || "";
+    document.getElementById("cliente_localidad").value = c.localidad || "";
+    document.getElementById("cliente_provincia").value = c.provincia || "";
+    document.getElementById("cliente_cp").value = c.cp || "";
+    document.getElementById("cliente_telefono").value = c.telefono || "";
+    document.getElementById("cliente_celular").value = c.celular || "";
+    document.getElementById("cliente_email").value = c.email || "";
+    document.getElementById("cliente_cuit").value = c.cuit || "";
+    document.getElementById("cliente_contacto").value = c.contacto || "";
+    document.getElementById("cliente_observaciones").value = c.observaciones || "";
+    document.getElementById("cliente_giro").value = c.giro_empresa || "";
+    document.getElementById("cliente_garantia").checked = !!c.cliente_garantia;
+    document.getElementById("cliente_contrato").checked = !!c.cliente_con_contrato;
+  }
+
+  async function cargarClientes() {
+  const resp = await fetch("/api/clientes");
+  if (!resp.ok) return;
+  listaClientes = await resp.json();
+
+  /* SELECT del formulario principal (Cliente / contacto) */
+  const selForm = document.getElementById("cliente_select_form");
+  if (selForm) {
+    selForm.innerHTML = '<option value="">-- Seleccionar cliente --</option>';
+    listaClientes.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = c.nombre;
+      selForm.appendChild(opt);
+    });
+  }
+
+  /* SELECT para Equipos (cliente dueño del equipo) */
+  const selEq = document.getElementById("equipo_cliente_select");
+  if (selEq) {
+    selEq.innerHTML = '<option value="">-- Seleccionar cliente --</option>';
+    listaClientes.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = c.nombre;
+      selEq.appendChild(opt);
+    });
+  }
+
+  /* Si ya no usás datalist de clientes, no hacemos nada con él.
+     Si quisieras volver a usarlo, descomentá esto y asegurate
+     de tener <datalist id="lista_clientes"> en el HTML:
+
+  const dl = document.getElementById("lista_clientes");
+  if (dl) {
+    dl.innerHTML = "";
+    listaClientes.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.nombre;
+      dl.appendChild(opt);
+    });
+  }
+  */
+
+  renderizarTablaClientes();
+ }
+
+
+  function renderizarTablaClientes() {
+    const tbody = document.querySelector("#tablaClientes tbody");
+    const filtro = document.getElementById("cliente_filtro").value.toLowerCase();
+    tbody.innerHTML = "";
+    listaClientes
+      .filter(c => !filtro || (c.nombre || "").toLowerCase().includes(filtro))
+      .forEach(c => {
+        const tr = document.createElement("tr");
+        tr.dataset.id = c.id;
+        tr.innerHTML = `
+          <td>${c.id}</td>
+          <td>${c.nombre || ""}</td>
+          <td>${c.telefono || ""}</td>
+          <td>${c.direccion || ""}</td>
+          <td>${c.localidad || ""}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+  }
+
+  document.querySelector("#tablaClientes tbody").addEventListener("click", (e) => {
+    const fila = e.target.closest("tr");
+    if (!fila) return;
+    const id = parseInt(fila.dataset.id);
+    const c = listaClientes.find(x => x.id === id);
+    if (c) escribirFormularioCliente(c);
+  });
+
+  document.getElementById("cliente_filtro").addEventListener("input", renderizarTablaClientes);
+
+  document.getElementById("btnClienteNuevo").addEventListener("click", () => {
+    limpiarFormularioCliente();
+  });
+
+  document.getElementById("btnClienteGuardar").addEventListener("click", async () => {
+    const id = document.getElementById("cliente_id").value;
+    const data = {
+      nombre: document.getElementById("cliente_nombre").value,
+      direccion: document.getElementById("cliente_direccion").value,
+      localidad: document.getElementById("cliente_localidad").value,
+      provincia: document.getElementById("cliente_provincia").value,
+      cp: document.getElementById("cliente_cp").value,
+      telefono: document.getElementById("cliente_telefono").value,
+      celular: document.getElementById("cliente_celular").value,
+      email: document.getElementById("cliente_email").value,
+      cuit: document.getElementById("cliente_cuit").value,
+      contacto: document.getElementById("cliente_contacto").value,
+      observaciones: document.getElementById("cliente_observaciones").value,
+      giro_empresa: document.getElementById("cliente_giro").value,
+      cliente_garantia: document.getElementById("cliente_garantia").checked,
+      cliente_con_contrato: document.getElementById("cliente_contrato").checked
+    };
+    if (!data.nombre) { alert("El nombre es obligatorio"); return; }
+
+    let resp;
+    if (id) {
+      resp = await fetch(`/api/clientes/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } else {
+      resp = await fetch("/api/clientes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    }
+    const r = await resp.json();
+    if (!resp.ok || !r.ok) { alert(r.error || "Error al guardar cliente"); return; }
+    alert("Cliente guardado");
+    await cargarClientes();
+  });
+
+  /* ========== EQUIPOS (TAB) ========== */
+  function limpiarFormularioEquipo() {
+    document.getElementById("equipo_id").value = "";
+    document.getElementById("equipo_descripcion").value = "";
+    document.getElementById("equipo_serie").value = "";
+    document.getElementById("equipo_tipo").value = "";
+    document.getElementById("equipo_marca").value = "";
+    document.getElementById("equipo_modelo").value = "";
+    document.getElementById("equipo_cliente_select").value = "";
+  }
+
+  function escribirFormularioEquipo(e) {
+    document.getElementById("equipo_id").value = e.id || "";
+    document.getElementById("equipo_descripcion").value = e.descripcion || "";
+    document.getElementById("equipo_serie").value = e.serie || "";
+    document.getElementById("equipo_tipo").value = e.tipo || "";
+    document.getElementById("equipo_marca").value = e.marca || "";
+    document.getElementById("equipo_modelo").value = e.modelo || "";
+
+    const firstName = (e.clientes || "").split(",")[0].trim();
+    const cli = listaClientes.find(c => c.nombre === firstName);
+    document.getElementById("equipo_cliente_select").value = cli ? cli.id : "";
+  }
+
+  async function cargarEquipos() {
+    const resp = await fetch("/api/equipos");
+    if (!resp.ok) return;
+    listaEquipos = await resp.json();
+
+    /* datalist para campo "equipo" del formulario principal (usamos descripción) */
+    const dl = document.getElementById("lista_equipos");
+    dl.innerHTML = "";
+    listaEquipos.forEach(eq => {
+      const opt = document.createElement("option");
+      opt.value = eq.descripcion || "";
+      dl.appendChild(opt);
+    });
+
+    renderizarTablaEquipos();
+  }
+
+  function renderizarTablaEquipos() {
+    const tbody = document.querySelector("#tablaEquipos tbody");
+    const filtro = document.getElementById("equipo_filtro").value.toLowerCase();
+    tbody.innerHTML = "";
+    listaEquipos
+      .filter(e => {
+        const texto = `${e.descripcion || ""} ${e.serie || ""}`.toLowerCase();
+        return !filtro || texto.includes(filtro);
+      })
+      .forEach(e => {
+        const tr = document.createElement("tr");
+        tr.dataset.id = e.id;
+        tr.innerHTML = `
+          <td>${e.id}</td>
+          <td>${e.descripcion || ""}</td>
+          <td>${e.serie || ""}</td>
+          <td>${e.tipo || ""}</td>
+          <td>${e.marca || ""}</td>
+          <td>${e.modelo || ""}</td>
+          <td>${e.clientes || ""}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+  }
+
+  document.querySelector("#tablaEquipos tbody").addEventListener("click", (e) => {
+    const fila = e.target.closest("tr");
+    if (!fila) return;
+    const id = parseInt(fila.dataset.id);
+    const eq = listaEquipos.find(x => x.id === id);
+    if (eq) escribirFormularioEquipo(eq);
+  });
+
+  document.getElementById("equipo_filtro").addEventListener("input", renderizarTablaEquipos);
+
+  document.getElementById("btnEquipoNuevo").addEventListener("click", () => {
+    limpiarFormularioEquipo();
+  });
+
+  document.getElementById("btnEquipoGuardar").addEventListener("click", async () => {
+    const id = document.getElementById("equipo_id").value;
+    const clienteId = document.getElementById("equipo_cliente_select").value;
+    if (!clienteId) {
+      alert("Debes seleccionar un cliente para el equipo");
+      return;
+    }
+
+    const data = {
+      descripcion: document.getElementById("equipo_descripcion").value,
+      serie: document.getElementById("equipo_serie").value,
+      tipo: document.getElementById("equipo_tipo").value,
+      marca: document.getElementById("equipo_marca").value,
+      modelo: document.getElementById("equipo_modelo").value,
+      cliente_id: parseInt(clienteId, 10)
+    };
+    if (!data.descripcion && !data.serie) {
+      alert("Descripción o serie obligatoria");
+      return;
+    }
+
+    let resp;
+    if (id) {
+      resp = await fetch(`/api/equipos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } else {
+      resp = await fetch("/api/equipos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    }
+    const r = await resp.json();
+    if (!resp.ok || !r.ok) { alert(r.error || "Error al guardar equipo"); return; }
+    alert("Equipo guardado");
+    await cargarEquipos();
+  });
+
+  /* ---------- CATALOGOS FALLAS/ACCESORIOS/REPUESTOS ---------- */
+  async function cargarSelect(url, selectId, fieldName) {
+  const resp = await fetch(url);
+  if (!resp.ok) return;
+  const datos = await resp.json();
+  const sel = document.getElementById(selectId);
+  const valorActual = sel.value;
+  sel.innerHTML = '<option value="">-- Seleccionar --</option>';
+  datos.forEach(item => {
+    const opt = document.createElement("option");
+    opt.value = item[fieldName];
+    opt.textContent = item[fieldName];
+    sel.appendChild(opt);
+  });
+  // restaurar selección si coincide
+  if (valorActual) sel.value = valorActual;
+ }
+
+
+  /* ---------- Inicialización ---------- */
+  cargarListaOrdenes();
+  
+  cargarClientes().then(cargarEquipos);
+  cargarListasAuxiliares();
+  cargarCatalogos();   // primero clientes, luego equipos
+});
+function combinarSeleccion(selectId, comentarioId) {
+  const sel = document.getElementById(selectId);
+  const val = sel.value.trim();
+  const com = document.getElementById(comentarioId).value.trim();
+
+  if (val && com) return `${val} - ${com}`;
+  return val || com || "";
+}
+
+function descomponerCampo(valor, selectId, comentarioId) {
+  const sel = document.getElementById(selectId);
+  const input = document.getElementById(comentarioId);
+
+  if (!valor) {
+    sel.value = "";
+    input.value = "";
+    return;
+  }
+
+  const idx = valor.indexOf(" - ");
+  let base = valor;
+  let com = "";
+  if (idx >= 0) {
+    base = valor.slice(0, idx);
+    com = valor.slice(idx + 3);
+  }
+
+  // si existe la opción, seleccionarla
+  const existe = Array.from(sel.options).some(o => o.value === base);
+  if (existe) {
+    sel.value = base;
+    input.value = com;
+  } else {
+    sel.value = "";
+    input.value = valor;  // todo como comentario
+  }
+}
+document.getElementById("btnFallaPlus").addEventListener("click", async () => {
+  const desc = prompt("Ingrese nueva falla:");
+  if (!desc) return;
+
+  const resp = await fetch("/api/fallas", {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify({ descripcion: desc })
+  });
+  const r = await resp.json();
+  if (!resp.ok || !r.ok) {
+    alert(r.error || "Error al guardar la falla");
+    return;
+  }
+
+  await cargarListasAuxiliares();
+  document.getElementById("falla_select").value = desc;
+});
+
+
+document.getElementById("btnRepuestoPlus").addEventListener("click", async () => {
+  const nombre = prompt("Ingrese el nombre del repuesto (ej: SSD 480GB Kingston):");
+  if (!nombre) return;
+
+  const descripcion = prompt("Detalle del repuesto (opcional):") || "";
+  let costo = prompt("Costo aproximado del repuesto (opcional):");
+
+  if (costo !== null && costo.trim() === "") costo = null;
+
+  const resp = await fetch("/api/repuestos", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nombre,
+      descripcion,
+      costo
+    })
+  });
+
+  const r = await resp.json();
+
+  if (!resp.ok || !r.ok) {
+    alert(r.error || "Error al guardar repuesto");
+    return;
+  }
+
+  // Recargar el catálogo y selects
+  await cargarListasAuxiliares();
+
+  // Seleccionar automáticamente este repuesto
+  document.getElementById("repuesto_select").value = nombre;
+});
+
+// Botón para agregar una nueva reparación
+// Botón para agregar una nueva reparación
+document.getElementById("btnReparacionPlus").addEventListener("click", async () => {
+  const desc = prompt("Ingrese una nueva reparación:");
+  if (!desc) return;
+
+  const resp = await fetch("/api/reparaciones", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ descripcion: desc })
+  });
+
+  const r = await resp.json();
+
+  if (!resp.ok || !r.ok) {
+    alert(r.error || "Error al guardar reparación");
+    return;
+  }
+
+  await cargarListasAuxiliares();
+  document.getElementById("reparacion_select").value = desc;
+});
+
+
+/* ========== CATÁLOGOS ========== */
+
+async function cargarTablaCatFallas() {
+  const resp = await fetch("/api/fallas");
+  if (!resp.ok) return;
+  const datos = await resp.json();
+  const tbody = document.querySelector("#tablaCatFallas tbody");
+  tbody.innerHTML = "";
+  datos.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${f.id}</td><td>${f.descripcion}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+async function cargarTablaCatReparaciones() {
+  const resp = await fetch("/api/reparaciones");
+  if (!resp.ok) return;
+  const datos = await resp.json();
+  const tbody = document.querySelector("#tablaCatReparaciones tbody");
+  tbody.innerHTML = "";
+  datos.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${r.id}</td><td>${r.descripcion}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+async function cargarTablaCatRepuestos() {
+  const resp = await fetch("/api/repuestos");
+  if (!resp.ok) return;
+  const datos = await resp.json();
+  const tbody = document.querySelector("#tablaCatRepuestos tbody");
+  tbody.innerHTML = "";
+  datos.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.id}</td>
+      <td>${r.nombre || ""}</td>
+      <td>${r.descripcion || ""}</td>
+      <td>${r.costo ?? ""}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function cargarCatalogos() {
+  await Promise.all([
+    cargarTablaCatFallas(),
+    cargarTablaCatReparaciones(),
+    cargarTablaCatRepuestos()
+  ]);
+}
+
+/* Botones agregar en catálogos */
+
+document.getElementById("btnCatFallaGuardar").addEventListener("click", async () => {
+  const desc = document.getElementById("cat_falla_desc").value.trim();
+
+  if (!desc) {
+    alert("Escribí una descripción de falla");
+    return;
+  }
+
+  const resp = await fetch("/api/fallas", {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify({ descripcion: desc })
+  });
+
+  const r = await resp.json();
+  if (!resp.ok || !r.ok) {
+    alert(r.error || "Error al guardar la falla");
+    return;
+  }
+
+  document.getElementById("cat_falla_desc").value = "";
+
+  await cargarCatalogos();        // recarga tablas de catálogos
+  await cargarListasAuxiliares(); // recarga selects del formulario
+});
+
+
+document.getElementById("btnCatRepuestoGuardar").addEventListener("click", async () => {
+  const nombre  = document.getElementById("cat_rep_nombre").value.trim();
+  const detalle = document.getElementById("cat_rep_detalle").value.trim();
+  const costo   = document.getElementById("cat_rep_costo").value || null;
+
+  if (!nombre) {
+    alert("El nombre del repuesto es obligatorio");
+    return;
+  }
+
+  const resp = await fetch("/api/repuestos", {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify({
+      nombre: nombre,
+      descripcion: detalle,
+      costo: costo
+    })
+  });
+
+  const r = await resp.json();
+  if (!resp.ok || !r.ok) {
+    alert(r.error || "Error al guardar el repuesto");
+    return;
+  }
+
+  // limpiar inputs
+  document.getElementById("cat_rep_nombre").value  = "";
+  document.getElementById("cat_rep_detalle").value = "";
+  document.getElementById("cat_rep_costo").value   = "";
+
+  // refrescar tablas y selects
+  await cargarCatalogos();
+  await cargarListasAuxiliares();
+});
+async function cargarSelectRepuestos() {
+  const resp = await fetch("/api/repuestos");
+  if (!resp.ok) return;
+  const datos = await resp.json();
+
+  const sel = document.getElementById("repuesto_select");
+  if (!sel) return;
+
+  const valorActual = sel.value;
+  sel.innerHTML = '<option value="">-- Seleccionar repuesto --</option>';
+
+  datos.forEach(r => {
+    const opt = document.createElement("option");
+
+    // Guardamos como valor SOLO el nombre
+    opt.value = r.nombre || "";
+
+    // Texto visible: nombre + costo
+    let texto = r.nombre || "";
+    if (r.costo != null) {
+      const num = Number(r.costo);
+      if (!Number.isNaN(num)) {
+        const formateado = num.toLocaleString("es-AR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        texto += ` - $${formateado}`;
+      }
+    }
+    opt.textContent = texto;
+
+    sel.appendChild(opt);
+  });
+
+  if (valorActual) sel.value = valorActual;
+}
+
+
+document.getElementById("btnCatRepuestoGuardar").addEventListener("click", async () => {
+  const nombre  = document.getElementById("cat_rep_nombre").value.trim();
+  const detalle = document.getElementById("cat_rep_detalle").value.trim();
+  let   costo   = document.getElementById("cat_rep_costo").value.trim();
+
+  if (!nombre) {
+    alert("El nombre del repuesto es obligatorio");
+    return;
+  }
+
+  if (costo === "") costo = null;
+
+  const resp = await fetch("/api/repuestos", {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify({
+      nombre: nombre,
+      descripcion: detalle,
+      costo: costo
+    })
+  });
+
+  const r = await resp.json();
+  if (!resp.ok || !r.ok) {
+    alert(r.error || "Error al guardar el repuesto");
+    return;
+  }
+
+  // limpiar inputs
+  document.getElementById("cat_rep_nombre").value  = "";
+  document.getElementById("cat_rep_detalle").value = "";
+  document.getElementById("cat_rep_costo").value   = "";
+
+  // refrescar tablas y selects
+  await cargarCatalogos();
+  await cargarListasAuxiliares();
+});
+
+
+
+</script>
+{% endblock %}
