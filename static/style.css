@@ -1,259 +1,459 @@
-/* ===== BASE ===== */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  font-family: Arial, sans-serif;
-  background: #0f172a;   /* azul oscuro de fondo */
-  color: #ffffff;
+/* =========================
+   Setup UI – Modern refresh
+   ========================= */
+
+:root{
+  --bg: #061b1d;
+  --panel: rgba(10, 60, 62, .70);
+  --panel-solid: #0b3b3d;
+  --panel-2: rgba(8, 46, 48, .75);
+
+  --txt: #e8f7f7;
+  --muted: rgba(232,247,247,.75);
+
+  --line: rgba(255,255,255,.12);
+  --line2: rgba(0,0,0,.25);
+
+  --accent: #33d6c9;
+  --accent-2: #27b3a7;
+
+  --danger: #ff5c7a;
+  --warn: #ffd166;
+  --ok: #2ee59d;
+
+  --shadow: 0 18px 48px rgba(0,0,0,.35);
+  --shadow2: 0 10px 22px rgba(0,0,0,.22);
+
+  --r: 12px;
+  --r2: 10px;
+
+  --pad: 12px;
+  --pad2: 10px;
+
+  --focus: 0 0 0 3px rgba(51,214,201,.25);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
 }
 
-/* Contenedor general de la pantalla */
-.layout-setup {
-  max-width: 1150px;      /* ancho máximo del panel */
-  margin: 20px auto;      /* centrado horizontal */
-  padding: 0 10px;        /* un poco de respiro a los lados */
+* { box-sizing: border-box; }
+html, body { height: 120%; }
+body{
+  margin:0;
+  color: var(--txt);
+  background:
+    radial-gradient(1200px 700px at 15% 10%, rgba(51,214,201,.18), transparent 60%),
+    radial-gradient(900px 500px at 80% 30%, rgba(39,179,167,.14), transparent 60%),
+    linear-gradient(180deg, #041314 0%, #061b1d 70%, #031012 100%);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
+}
+#tablaOrdenes tbody tr.selected {
+  outline: 2px solid #4aa3ff;
+}
+/* =========================
+   Logo NBF – fijo arriba derecha
+   ========================= */
+
+.logo-box.logo-nbf-fixed{
+  position: fixed;        /* fuera de TODO el layout */
+  top: 12px;              /* arriba */
+  right: 18px;            /* derecha */
+  z-index: 1000;          /* por encima de todo */
+  pointer-events: none;   /* no molesta */
 }
 
-/* ===== TABS ===== */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
+.logo-box.logo-nbf-fixed > img{
+  height: 160px;          /* tamaño grande y legible */
+  width: auto;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 10px rgba(0,180,180,.35));
 }
 
-.tab-button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background: #003b3b;
-  color: #fff;
-  font-weight: 600;
+
+
+/* Layout container */
+.layout-setup{
+  max-width: 1320px;
+  margin: 16px auto;
+  padding: 0 14px 20px;
 }
 
-.tab-button.active {
-  background: #00b894;
-  color: #002525;
+/* =========================
+   Tabs
+   ========================= */
+.tabs{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap: wrap;
+  padding: 10px;
+  border-radius: var(--r);
+  background: rgba(0,0,0,.18);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow2);
+  backdrop-filter: blur(10px);
 }
 
-.tab-pane {
-  display: none;
+.tab-button{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color: var(--txt);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor:pointer;
+  font-weight: 650;
+  letter-spacing: .2px;
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+  user-select: none;
 }
 
-.tab-pane.active {
-  display: block;
+.tab-button:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(51,214,201,.35);
+}
+.tab-button:active{ transform: translateY(1px); }
+
+.tab-button.active{
+  background: linear-gradient(180deg, rgba(51,214,201,.25), rgba(51,214,201,.10));
+  border-color: rgba(51,214,201,.55);
+  box-shadow: 0 0 0 2px rgba(51,214,201,.12) inset;
 }
 
-/* ===== PANEL GENÉRICO ===== */
-.panel {
-  background: #004747;
-  color: #ffffff;
-  padding: 16px 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+/* =========================
+   Panels
+   ========================= */
+.tab-content{ margin-top: 14px; }
+.tab-pane{ display:none; }
+.tab-pane.active{ display:block; }
+
+.panel{
+  border-radius: var(--r);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
 }
 
-/* ===== FORMULARIO ===== */
-
-.panel-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.panel > h3, .panel > h4{
+  margin:0;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,.18), transparent);
+  border-bottom: 1px solid var(--line);
 }
 
-.header-form {
-  display: grid;
-  grid-template-columns: 1.1fr 1.2fr auto auto;
-  align-items: center;
+/* =========================
+   Header form
+   ========================= */
+.header-form{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr auto;
   gap: 12px;
+  align-items:center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.18), transparent);
 }
 
-.buscar-box {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.titulo-form{
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  opacity: .95;
 }
 
-.buscar-box label {
-  font-size: 13px;
+.logo-box img{
+  height: 44px;
+  width: auto;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
 }
 
-.buscar-box input {
-  padding: 4px 6px;
+/* Search box */
+.buscar-box{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex-wrap: wrap;
 }
 
-.buscar-box button {
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-}
-
-.titulo-form {
-  text-align: center;
-  font-size: 20px;
+.buscar-box label{
   font-weight: 700;
+  color: var(--muted);
 }
 
-.estado-actual {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.estado-display {
-  background: #00b894;
-  color: #002525;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-weight: 700;
-}
-
-.logo-box img {
-  height: 60px;
-}
-
-/* Grid de campos del formulario, se mantiene gap constante */
-.form-grid {
-  display: flex;
-  flex-direction: column;
+/* Estado chip */
+.estado-actual{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
   gap: 10px;
 }
-
-.campo-row {
-  display: grid;
-  grid-template-columns: 170px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 10px;
+.estado-actual span:first-child{
+  color: var(--muted);
+  font-weight: 700;
+}
+.estado-display{
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  border: 1px solid rgba(51,214,201,.38);
+  background: rgba(51,214,201,.12);
 }
 
-.campo-row label {
-  font-size: 14px;
+/* =========================
+   Form grid
+   ========================= */
+.form-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  padding: 14px 16px 18px;
 }
 
-.campo-row input,
-.campo-row select {
-  padding: 5px 6px;
-  border-radius: 4px;
-  border: 1px solid #0b4c4c;
+.campo-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  min-height: 42px;
+}
+
+.campo-row label{
+  flex: 0 0 170px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.campo-row > input,
+.campo-row > select,
+.campo-row textarea{
+  flex: 1 1 auto;
+}
+
+/* Make some “wide rows” span both cols if you add class="span-2" */
+.campo-row.span-2{ grid-column: 1 / -1; }
+
+/* =========================
+   Inputs / Selects
+   ========================= */
+input, select, textarea, button{
+  font: inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select,
+textarea{
   width: 100%;
-  box-sizing: border-box;
+  border-radius: var(--r2);
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.22);
+  color: var(--txt);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
 
-/* Botones inferiores del formulario */
-.botonera-form {
-  margin-top: 4px;
-  display: flex;
+textarea{ min-height: 90px; resize: vertical; }
+
+input:focus, select:focus, textarea:focus{
+  border-color: rgba(51,214,201,.65);
+  box-shadow: var(--focus);
+  background: rgba(0,0,0,.28);
+}
+
+select[multiple]{
+  padding: 8px;
+  min-height: 92px;
+}
+
+/* Readonly / locked */
+input[readonly], input:disabled, .locked{
+  background: rgba(0,0,0,.35) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  color: rgba(232,247,247,.70) !important;
+}
+
+/* Placeholder */
+::placeholder{ color: rgba(232,247,247,.45); }
+
+/* =========================
+   Buttons
+   ========================= */
+button{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+  color: var(--txt);
+  padding: 10px 12px;
+  cursor:pointer;
+  font-weight: 750;
+  transition: transform .08s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+}
+
+button:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(51,214,201,.35);
+}
+button:active{ transform: translateY(1px); }
+
+button:disabled{
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* Primary-like (si querés asignalo agregando class="btn-primary") */
+.btn-primary{
+  background: linear-gradient(180deg, rgba(51,214,201,.25), rgba(51,214,201,.10));
+  border-color: rgba(51,214,201,.55);
+}
+.btn-danger{
+  background: rgba(255,92,122,.12);
+  border-color: rgba(255,92,122,.50);
+}
+.btn-muted{
+  background: rgba(255,255,255,.06);
+}
+
+/* Your “botonera” */
+.botonera-form{
+  display:flex;
   gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 16px 16px;
+  border-top: 1px solid var(--line);
+  background: rgba(0,0,0,.10);
 }
 
-.botonera-form button {
-  padding: 6px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
+/* Make important action buttons stand out by ID (optional) */
+#btnAgregar{ background: rgba(46,229,157,.12); border-color: rgba(46,229,157,.45); }
+#btnModificar{ background: rgba(51,214,201,.12); border-color: rgba(51,214,201,.45); }
+#btnMarcarTerminada{ background: rgba(255,209,102,.12); border-color: rgba(255,209,102,.45); }
+#btnMarcarRetirada{ background: rgba(46,229,157,.12); border-color: rgba(46,229,157,.45); }
+#btnLimpiar{ background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); }
 
-/* ===== LISTA ===== */
-
-.panel-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.lista-header {
-  display: flex;
+/* =========================
+   Lists / Tables
+   ========================= */
+.lista-header{
+  display:flex;
+  gap: 12px;
+  align-items:center;
   justify-content: space-between;
-  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(0,0,0,.10);
 }
 
-.lista-busqueda {
-  display: flex;
-  gap: 6px;
+.lista-busqueda{
+  display:flex;
+  gap: 10px;
+  align-items:center;
 }
 
-.lista-busqueda input {
-  padding: 4px 6px;
+.lista-contenedor{
+  padding: 12px 12px 14px;
+  overflow:auto;
 }
 
-.lista-busqueda button {
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
+table{
+  width:100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  min-width: 960px;
 }
 
-/* Scroll de la tabla si crece mucho */
-.lista-contenedor {
-  max-height: 520px;
-  overflow-y: auto;
-  margin-top: 6px;
+thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  text-align:left;
+  font-weight: 850;
+  letter-spacing: .25px;
+  color: rgba(232,247,247,.90);
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 10px;
 }
 
-/* Tabla de equipos */
-#tablaOrdenes {
+tbody td{
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  color: rgba(232,247,247,.88);
+  vertical-align: top;
+}
+
+tbody tr:hover{
+  background: rgba(51,214,201,.08);
+}
+
+.lista-tip{
+  margin: 0;
+  padding: 10px 16px 14px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+/* =========================
+   Catalog tables small
+   ========================= */
+#tablaCatFallas, #tablaCatReparaciones, #tablaCatRepuestos{
+  min-width: 0;
   width: 100%;
-  border-collapse: collapse;
   font-size: 12px;
 }
-
-#tablaOrdenes th,
-#tablaOrdenes td {
-  border-bottom: 1px solid #0b4c4c;
-  padding: 4px 6px;
-  text-align: left;
+#tablaCatFallas thead th,
+#tablaCatReparaciones thead th,
+#tablaCatRepuestos thead th{
+  top: 0;
 }
 
-#tablaOrdenes tr {
-  cursor: pointer;
-}
-
-#tablaOrdenes tr:hover {
-  background: #035959;
-}
-
-.lista-tip {
-  font-size: 11px;
-  opacity: 0.8;
-  margin-top: 4px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .header-form {
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 980px){
+  .header-form{
     grid-template-columns: 1fr;
-    row-gap: 10px;
+    justify-items: start;
   }
-
-  .logo-box {
-    justify-self: flex-end;
-  }
-
-  .campo-row {
+  .estado-actual{ justify-content: flex-start; }
+  .form-grid{
     grid-template-columns: 1fr;
   }
-}
-.combo-plus {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.combo-plus select {
-  flex: 0 0 220px;  /* ancho fijo del combo */
-  padding: 4px 6px;
+  .campo-row label{
+    flex: 0 0 140px;
+  }
+  table{ min-width: 820px; }
 }
 
-.combo-plus input {
-  flex: 1;
-  padding: 4px 6px;
+@media (max-width: 560px){
+  .campo-row{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .campo-row label{ flex: 0 0 auto; }
+  .tabs{ gap: 8px; }
+  .tab-button{ width: 100%; justify-content:center; }
 }
-
-.combo-plus button {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
+.toast{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #fff;
+  max-width: 360px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  z-index: 9999;
 }
+.toast.ok{ background: rgba(46, 204, 113, .92); }
+.toast.error{ background: rgba(231, 76, 60, .92); }
